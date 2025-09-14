@@ -9,6 +9,8 @@ import './Menu.css';
 const Menu = () => {
   const dispatch = useDispatch();
 
+  console.log('Menu component rendering...');
+
   const handleStartGame = () => {
     dispatch(startSession());
     dispatch(startGame());

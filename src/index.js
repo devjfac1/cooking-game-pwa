@@ -114,34 +114,65 @@ const setupPerformanceMonitoring = () => {
 
 // Initialize app
 const initializeApp = async () => {
-  // Hide loading screen
-  const loadingScreen = document.getElementById('loading-screen');
-  if (loadingScreen) {
-    loadingScreen.style.display = 'none';
+  console.log('Initializing app...');
+
+  try {
+    // Register service worker
+    await registerServiceWorker();
+    console.log('Service worker registered');
+
+    // Setup PWA install prompt
+    setupInstallPrompt();
+
+    // Setup performance monitoring
+    setupPerformanceMonitoring();
+
+    // Render React app
+    console.log('Rendering React app...');
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      throw new Error('Root element not found');
+    }
+
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+      <React.StrictMode>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </React.StrictMode>
+    );
+
+    // Hide loading screen after a short delay to ensure React has rendered
+    setTimeout(() => {
+      const loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen) {
+        console.log('Hiding loading screen');
+        loadingScreen.style.display = 'none';
+      }
+    }, 100);
+
+  } catch (error) {
+    console.error('Error initializing app:', error);
+    // Hide loading screen even if there's an error
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+      loadingScreen.style.display = 'none';
+    }
   }
-
-  // Register service worker
-  await registerServiceWorker();
-
-  // Setup PWA install prompt
-  setupInstallPrompt();
-
-  // Setup performance monitoring
-  setupPerformanceMonitoring();
-
-  // Render React app
-  const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>
-  );
 };
 
 // Start the app
 initializeApp().catch(console.error);
+
+// Fallback: Hide loading screen after 5 seconds if it's still showing
+setTimeout(() => {
+  const loadingScreen = document.getElementById('loading-screen');
+  if (loadingScreen && loadingScreen.style.display !== 'none') {
+    console.log('Fallback: Hiding loading screen after timeout');
+    loadingScreen.style.display = 'none';
+  }
+}, 5000);
 
 // Web Vitals monitoring
 import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
