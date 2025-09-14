@@ -13,6 +13,7 @@ import { updateTimer, pauseGame, resumeGame } from './redux/reducers/gameReducer
 import './styles/index.css';
 
 const App = () => {
+  console.log('App component rendering...');
   const dispatch = useDispatch();
   const {
     showModal,

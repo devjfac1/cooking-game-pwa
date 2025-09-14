@@ -117,17 +117,17 @@ const initializeApp = async () => {
   console.log('Initializing app...');
 
   try {
-    // Register service worker
-    await registerServiceWorker();
-    console.log('Service worker registered');
+    // Skip service worker for now to isolate the issue
+    // await registerServiceWorker();
+    console.log('Skipping service worker registration for debugging');
 
-    // Setup PWA install prompt
-    setupInstallPrompt();
+    // Skip PWA install prompt for now
+    // setupInstallPrompt();
 
-    // Setup performance monitoring
-    setupPerformanceMonitoring();
+    // Skip performance monitoring for now
+    // setupPerformanceMonitoring();
 
-    // Render React app
+    // Render React app immediately
     console.log('Rendering React app...');
     const rootElement = document.getElementById('root');
     if (!rootElement) {
@@ -143,14 +143,14 @@ const initializeApp = async () => {
       </React.StrictMode>
     );
 
-    // Hide loading screen after a short delay to ensure React has rendered
-    setTimeout(() => {
-      const loadingScreen = document.getElementById('loading-screen');
-      if (loadingScreen) {
-        console.log('Hiding loading screen');
-        loadingScreen.style.display = 'none';
-      }
-    }, 100);
+    console.log('React app rendered successfully');
+
+    // Hide loading screen immediately after rendering
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+      console.log('Hiding loading screen');
+      loadingScreen.style.display = 'none';
+    }
 
   } catch (error) {
     console.error('Error initializing app:', error);
@@ -165,14 +165,37 @@ const initializeApp = async () => {
 // Start the app
 initializeApp().catch(console.error);
 
-// Fallback: Hide loading screen after 5 seconds if it's still showing
+// Multiple fallback mechanisms to ensure loading screen disappears
 setTimeout(() => {
   const loadingScreen = document.getElementById('loading-screen');
   if (loadingScreen && loadingScreen.style.display !== 'none') {
-    console.log('Fallback: Hiding loading screen after timeout');
+    console.log('Fallback 1: Hiding loading screen after 2 seconds');
+    loadingScreen.style.display = 'none';
+  }
+}, 2000);
+
+setTimeout(() => {
+  const loadingScreen = document.getElementById('loading-screen');
+  if (loadingScreen && loadingScreen.style.display !== 'none') {
+    console.log('Fallback 2: Force hiding loading screen after 5 seconds');
     loadingScreen.style.display = 'none';
   }
 }, 5000);
+
+// Emergency fallback - hide loading screen on any user interaction
+const hideLoadingOnInteraction = () => {
+  const loadingScreen = document.getElementById('loading-screen');
+  if (loadingScreen && loadingScreen.style.display !== 'none') {
+    console.log('Emergency: Hiding loading screen on user interaction');
+    loadingScreen.style.display = 'none';
+    // Remove listeners after first interaction
+    document.removeEventListener('click', hideLoadingOnInteraction);
+    document.removeEventListener('touchstart', hideLoadingOnInteraction);
+  }
+};
+
+document.addEventListener('click', hideLoadingOnInteraction);
+document.addEventListener('touchstart', hideLoadingOnInteraction);
 
 // Web Vitals monitoring
 import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
