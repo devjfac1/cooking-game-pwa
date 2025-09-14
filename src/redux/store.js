@@ -20,7 +20,7 @@ export const store = configureStore({
       immutableCheck: {
         ignoredPaths: ['ui.touchState'],
       },
-    }),
+    }).concat(process.env.NODE_ENV === 'development' ? [performanceMiddleware] : []),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
@@ -41,11 +41,6 @@ const performanceMiddleware = (store) => (next) => (action) => {
 
   return result;
 };
-
-// Add performance middleware in development
-if (process.env.NODE_ENV === 'development') {
-  store.middleware.push(performanceMiddleware);
-}
 
 // Hot module replacement for reducers
 if (process.env.NODE_ENV === 'development' && module.hot) {
