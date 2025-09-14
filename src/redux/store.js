@@ -4,6 +4,20 @@ import customerReducer from './reducers/customerReducer';
 import scoreReducer from './reducers/scoreReducer';
 import uiReducer from './reducers/uiReducer';
 
+// Performance monitoring middleware
+const performanceMiddleware = (store) => (next) => (action) => {
+  const start = performance.now();
+  const result = next(action);
+  const end = performance.now();
+
+  // Log slow actions in development
+  if (process.env.NODE_ENV === 'development' && end - start > 16) {
+    console.warn(`Slow action: ${action.type} took ${end - start}ms`);
+  }
+
+  return result;
+};
+
 // Configure store with middleware for performance
 export const store = configureStore({
   reducer: {
@@ -27,20 +41,6 @@ export const store = configureStore({
 // Types for use in components (can be imported as needed)
 // export type RootState = ReturnType<typeof store.getState>;
 // export type AppDispatch = typeof store.dispatch;
-
-// Performance monitoring middleware
-const performanceMiddleware = (store) => (next) => (action) => {
-  const start = performance.now();
-  const result = next(action);
-  const end = performance.now();
-
-  // Log slow actions in development
-  if (process.env.NODE_ENV === 'development' && end - start > 16) {
-    console.warn(`Slow action: ${action.type} took ${end - start}ms`);
-  }
-
-  return result;
-};
 
 // Hot module replacement for reducers
 if (process.env.NODE_ENV === 'development' && module.hot) {
