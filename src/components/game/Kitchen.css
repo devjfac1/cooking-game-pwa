@@ -1,0 +1,77 @@
+.kitchen {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.kitchen-header h2 {
+  margin: 0 0 16px 0;
+  color: var(--primary-color);
+}
+
+.cooking-stations {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cooking-station {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  border: 2px solid var(--light-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cooking-station:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 107, 53, 0.1);
+}
+
+.station-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.station-name {
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.ingredients-panel h3 {
+  margin: 0 0 12px 0;
+  color: var(--primary-color);
+}
+
+.ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.ingredient {
+  padding: 8px;
+  border: 2px solid var(--light-gray);
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ingredient:hover {
+  border-color: var(--primary-color);
+  background: rgba(255, 107, 53, 0.1);
+}
+
+.kitchen-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.kitchen-actions .btn {
+  flex: 1;
+}
